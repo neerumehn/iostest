@@ -7,9 +7,9 @@
 //
 
 import UIKit
-
+import MapKit
 import CoreLocation
-class ViewController: UIViewController ,CLLocationManagerDelegate{
+class ViewController: UIViewController ,MKMapViewDelegate,CLLocationManagerDelegate{
     
     let userLocation = CLLocation(latitude: 52.23678, longitude: 13.55555)
     
@@ -82,6 +82,13 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
         
     }()
     
+    var mapview : MKMapView = {
+    let m = MKMapView()
+        return m
+    
+    }()
+    
+    
     func checking() {
         
         let lat = enterlatitude.text
@@ -93,7 +100,15 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
             let alert = UIAlertController(title: "Attention", message: "Matched ", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+                
+           
 
+            
+//            let annotations = self.mapview.annotations
+//                
+//            for annotation in annotations{
+//            self.mapview.view(for: annotation)?.isHidden = false
+              //  }
             }
         }
         
@@ -103,9 +118,16 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             
+           
+
             
-        }
-        
+//            let annotations = self.mapview.annotations
+//            
+//            for annotation in annotations {
+//            self.mapview.view(for: annotation)?.isHidden = true
+//            }
+//            
+       }        
     
     }
 
@@ -127,6 +149,7 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
             view.addSubview(enterlatitude)
             view.addSubview(enterlongitude)
             view.addSubview(check)
+            view.addSubview(mapview)
             
             view.backgroundColor = UIColor.lightGray
             latitude.anchorCenterSuperview()
@@ -147,8 +170,16 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
            check.anchorCenterXToSuperview(constant: -20)
            check.anchorCenterYToSuperview(constant: -150)
             
+            mapview.leftAnchor.constraint(equalTo:
+                view.leftAnchor, constant: 10)
+            mapview.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
+            mapview.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1)
+            mapview.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1)
             
-                        // Ask for Authorisation from the User.
+            self.mapview.showsUserLocation = true
+
+            
+            // Ask for Authorisation from the User.
             self.locationManager.requestAlwaysAuthorization()
             
             // For use in foreground
@@ -187,6 +218,11 @@ class ViewController: UIViewController ,CLLocationManagerDelegate{
         print(coord.longitude)
         print(coord.latitude)
         
+        let center = CLLocationCoordinate2D(latitude: coord.latitude, longitude: coord.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpanMake(1, 1))
+        
+        self.mapview.setRegion(region, animated: true)
+        self.locationManager.stopUpdatingLocation()
        
         
     }
