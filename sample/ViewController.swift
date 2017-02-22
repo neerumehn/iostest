@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 class ViewController: UIViewController ,MKMapViewDelegate,CLLocationManagerDelegate{
     
-    let userLocation = CLLocation(latitude: 52.23678, longitude: 13.55555)
+    //let userLocation = CLLocation(latitude: 52.23678, longitude: 13.55555)
     
         var longitude : UILabel = {
         let m = UILabel()
